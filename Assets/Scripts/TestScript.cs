@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class TestScript : MonoBehaviour
@@ -10,10 +11,20 @@ public class TestScript : MonoBehaviour
 
     private Camera m_Camera;
 
+    private delegate void Runnable();
+    
+    [DllImport("TestUnity3DNative.dll")]
+    private static extern void Call(Runnable runnable);
+
+    private static void Foo()
+    {
+        Debug.Log("TestScript::Foo");
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        Call(Foo);
         m_Camera = Camera.main;
         m_DistToGround = GetComponent<Collider>().bounds.extents.y;
     }
